@@ -23,20 +23,21 @@ screen = pygame.display.set_mode(size)
 pygame.display.set_caption("BlobAI")
 clock = pygame.time.Clock()
 ICON_IMAGE = pygame.image.load("icon.png")
+BACKGROUND_IMAGE = pygame.image.load("background.png")
 
 pygame.display.set_icon(ICON_IMAGE)
-
-# Defining colors
-BLACK = (0, 0, 0)
 
 # Store Blobs and Fruits in lists
 blobs = []
 fruits = []
 
 # Spawn initial Blobs
+Blob.screenX = SCREEN_X
+Blob.screenY = SCREEN_Y
 for i in range(0, 10):
 	size = random.randint(20, 70)
 	blob = Blob(random.randint(int(size / 2), SCREEN_X - int(size / 2)), random.randint(int(size / 2), SCREEN_Y - int(size / 2)), size)
+	blob.setTarget(0,0)
 	blobs.append(blob)
 
 # Spawn initial Fruits
@@ -62,12 +63,12 @@ while running:
 	for blob in blobs:
 		blob.update()
 
-	# Draw Screen 
-	screen.fill(BLACK)
+	# Drawn Screen Background
+	screen.fill((0,0,0))
 
 	# Draw Blobs
 	for blob in blobs:
-		pygame.draw.circle(screen, (abs(blob.color[0] - 100), abs(blob.color[1] - 100), abs(blob.color[2] - 100)), [blob.xLoc, blob.yLoc], int((blob.size / 2) * SCALE))
+		pygame.draw.circle(screen, (abs(blob.color[0] - 20), abs(blob.color[1] - 20), abs(blob.color[2] - 20)), [blob.xLoc, blob.yLoc], int((blob.size / 2) * SCALE))
 		pygame.draw.circle(screen, blob.color, [blob.xLoc, blob.yLoc], (int((blob.size / 2) * SCALE)) - 5)
 
 	# Draw Fruits
