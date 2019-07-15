@@ -75,10 +75,12 @@ while running:
 
 	# Draw Blobs
 	for blob in blobs:
-
+		# Show Target Radius
+		pygame.draw.circle(screen, (10,10,10), (blob.xLoc, blob.yLoc), blob.radius() + blob.vision)
+	for blob in blobs:
 		# Show Target Lines
 		pygame.draw.line(screen, (50,50,50), (blob.xLoc, blob.yLoc), blob.target, int(1 * SCALE))
-
+	for blob in blobs:
 		pygame.draw.circle(screen, (abs(blob.color[0] - 20), abs(blob.color[1] - 20), abs(blob.color[2] - 20)), [blob.xLoc, blob.yLoc], int((blob.size / 2) * SCALE))
 		pygame.draw.circle(screen, blob.color, [blob.xLoc, blob.yLoc], (int((blob.size / 2) * SCALE)) - 5)
 
