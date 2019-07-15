@@ -37,7 +37,7 @@ Blob.screenY = SCREEN_Y
 for i in range(0, 10):
 	size = random.randint(20, 70)
 	blob = Blob(random.randint(int(size / 2), SCREEN_X - int(size / 2)), random.randint(int(size / 2), SCREEN_Y - int(size / 2)), size)
-	blob.setTarget(0,0)
+	blob.setTarget(blob.xLoc,blob.yLoc)
 	blobs.append(blob)
 
 # Spawn initial Fruits
@@ -58,6 +58,13 @@ while running:
 
 
 	### Game logic ###
+	for blob in blobs:
+		for f in fruits:
+			if blob.eatClosebyFruits(f.xLoc, f.yLoc, f.size):
+				fruits.remove(f)
+				size = 30
+				fruit = Fruit(random.randint(int(size / 2), SCREEN_X - int(size / 2)), random.randint(int(size / 2), SCREEN_Y - int(size / 2)), size)
+				fruits.append(fruit)
 
 	# Update Blobs
 	for blob in blobs:
@@ -68,6 +75,10 @@ while running:
 
 	# Draw Blobs
 	for blob in blobs:
+
+		# Show Target Lines
+		pygame.draw.line(screen, (50,50,50), (blob.xLoc, blob.yLoc), blob.target, int(1 * SCALE))
+
 		pygame.draw.circle(screen, (abs(blob.color[0] - 20), abs(blob.color[1] - 20), abs(blob.color[2] - 20)), [blob.xLoc, blob.yLoc], int((blob.size / 2) * SCALE))
 		pygame.draw.circle(screen, blob.color, [blob.xLoc, blob.yLoc], (int((blob.size / 2) * SCALE)) - 5)
 
