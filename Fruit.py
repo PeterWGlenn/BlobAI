@@ -10,7 +10,7 @@ fruits = []
 
 class Fruit(object):
 
-    size = 20
+    size = 10
 
     def __init__(self, sX, sY):
         self.xLoc = random.randint(int(self.size / 2), sX - int(self.size / 2))

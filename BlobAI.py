@@ -7,9 +7,10 @@
 # Imports
 import pygame
 import random
-import Fruit
+from Fruit import Fruit
 from Fruit import fruits
 from Blob import Blob
+from Blob import blobs
 
 # Game constants
 FRAMERATE = 60
@@ -28,21 +29,16 @@ BACKGROUND_IMAGE = pygame.image.load("background.png")
 
 pygame.display.set_icon(ICON_IMAGE)
 
-# Store Blobs and Fruits in lists
-blobs = []
-
 # Spawn initial Blobs
 Blob.screenX = SCREEN_X
 Blob.screenY = SCREEN_Y
-for i in range(0, 10):
-	size = random.randint(20, 70)
+for i in range(0, 2):
+	size = random.randint(14, 14)
 	blob = Blob(random.randint(int(size / 2), SCREEN_X - int(size / 2)), random.randint(int(size / 2), SCREEN_Y - int(size / 2)), size)
-	blob.setTarget(blob.xLoc,blob.yLoc)
-	blobs.append(blob)
 
 # Spawn initial Fruits
 for i in range(0, 10):
-	fruit = Fruit.Fruit(SCREEN_X, SCREEN_Y)
+	fruit = Fruit(SCREEN_X, SCREEN_Y)
 
 # Main Game Loop
 running = True
@@ -73,7 +69,7 @@ while running:
 		pygame.draw.line(screen, (50,50,50), (blob.xLoc, blob.yLoc), blob.target, int(1 * SCALE))
 	for blob in blobs:
 		pygame.draw.circle(screen, (abs(blob.color[0] - 20), abs(blob.color[1] - 20), abs(blob.color[2] - 20)), [blob.xLoc, blob.yLoc], int((blob.size / 2) * SCALE))
-		pygame.draw.circle(screen, blob.color, [blob.xLoc, blob.yLoc], (int((blob.size / 2) * SCALE)) - 5)
+		pygame.draw.circle(screen, blob.color, [blob.xLoc, blob.yLoc], (int((blob.size / 2) * SCALE)) - 0)
 
 	# Draw Fruits
 	for fruit in fruits:
