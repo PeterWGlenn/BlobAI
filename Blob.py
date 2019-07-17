@@ -5,21 +5,21 @@
 
 import math
 import random
+import Fruit
+from Fruit import fruits
+from Util import getDistance
 
 screenX = 1333
 screenY = 750
 
-def getDistance(point1, point2):
-    return math.sqrt((point1[0] - point2[0])**2 + (point1[1] - point2[1])**2)
-
 class Blob(object):
 
-    color = (0, 255, 255)
+    color = (0, 220, 255)
     xVel = 0
     yVel = 0
-    speed = 3
+    speed = 2
     target = (-1, -1)
-    reachedTargetDistance = 10
+    reachedTargetDistance = 5
     vision = 100
 
     state = 0 # 0 = wandering, 1 = food targeting
@@ -32,23 +32,42 @@ class Blob(object):
     def radius(self):
     	return int(self.size / 2)
 
+    def location(self):
+    	return (self.xLoc, self.yLoc)
+
     def update(self):  
 
+    	# Eat nearby fruits
+    	for f in Fruit.fruits:
+    		if self.eatClosebyFruits(f.xLoc, f.yLoc, f.size):
+    			fruits.remove(f)
+    			fruit = Fruit.Fruit(screenX, screenY)
+
+    	# Search for food 
+    	foundFood = False
+    	for fruit in fruits:
+    		if getDistance((self.xLoc, self.yLoc), (fruit.xLoc, fruit.yLoc)) <= self.vision + self.radius():
+    			# If first food, set target
+    			if not foundFood:
+    				self.setTarget(fruit.xLoc, fruit.yLoc)
+    			# Found food within sight
+    			foundFood = True
+    			# If found food, set target to closest food
+    			if foundFood and getDistance(self.location(), self.target) > getDistance(self.location(), (fruit.xLoc, fruit.yLoc)):
+    				self.setTarget(fruit.xLoc, fruit.yLoc)
+
+    	# If no food is found, wander
+
     	# If target location is reached, set new target location
-    	if getDistance((self.xLoc, self.yLoc), self.target) <= self.reachedTargetDistance + self.radius():
-    		if self.state == 0:
-    			# Wandering
+    	if not foundFood and getDistance((self.xLoc, self.yLoc), self.target) <= self.reachedTargetDistance + self.radius():
 
-    			# Pick random coordinate within visible range
-    			randomRadian = 2 * math.pi * random.random()
-    			randomRadius = (self.vision + self.radius()) * random.random()
-    			x, y = randomRadius * math.cos(randomRadian) + self.xLoc, randomRadius * math.sin(randomRadian) + self.yLoc
+    		# Pick random coordinate within visible range
+    		randomRadian = 2 * math.pi * random.random()
+    		randomRadius = (self.vision + self.radius()) * random.random()
+    		x, y = randomRadius * math.cos(randomRadian) + self.xLoc, randomRadius * math.sin(randomRadian) + self.yLoc
 
- 				# Set target to that coordinate
-    			self.setTarget(min(max(x, self.radius()), screenX - self.radius()), min(max(y, self.radius()), screenY - self.radius()))
-    		else:
-    			# No valid state, do nothing
-    			self.setTarget(-1, -1)
+ 			# Set target to that coordinate
+    		self.setTarget(min(max(x, self.radius()), screenX - self.radius()), min(max(y, self.radius()), screenY - self.radius()))
 
     	# Set Velocity Toward Target Location
     	if self.target[0] != -1:
@@ -101,5 +120,7 @@ class Blob(object):
     		return True
     	else:
     		return False
+
+
 
 
