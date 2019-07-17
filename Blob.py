@@ -8,6 +8,7 @@ import random
 import Fruit
 from Fruit import fruits
 from Util import getDistance
+from Util import combineGenes
 
 screenX = 1333
 screenY = 750
@@ -17,13 +18,14 @@ blobs = []
 
 class Blob(object):
 
-    color = (0, 220, 255)
     xVel = 0
     yVel = 0
-    speed = 2
+    speed = 1
+
+    color = (125, 125, 125)
     reachedTargetDistance = 5
-    vision = 250
-    matingSize = 40
+    vision = 100
+    matingSize = 30
 
     state = 'w' # w = wandering, f = food targeting, m = mating
 
@@ -151,10 +153,19 @@ class Blob(object):
     	else:
     		return False
 
+    def makeInitialBlob():
+    	size = 20
+    	blob = Blob(random.randint(int(size / 2), screenX - int(size / 2)), random.randint(int(size / 2), screenY - int(size / 2)), size)
+
     def makeBaby(self, mate):
     	baby = Blob(self.xLoc, self.yLoc, int((self.size + mate.size) / 3))
-    	baby.color = (255,0,255)
-    	print(len(blobs))
+
+    	baby.color =  (combineGenes(0, 255, self.color[0], mate.color[0]), combineGenes(0, 255, self.color[1], mate.color[1]), combineGenes(0, 255, self.color[2], mate.color[2]))
+    	reachedTargetDistance = combineGenes(0, 100, self.reachedTargetDistance, mate.reachedTargetDistance)
+    	vision = combineGenes(1, 750, self.vision, mate.vision)
+    	matingSize = combineGenes(10, 500, self.matingSize, mate.matingSize)
+
+    	print("Blobs: ", len(blobs))
 
 
 

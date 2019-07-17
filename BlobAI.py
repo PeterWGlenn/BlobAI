@@ -32,12 +32,11 @@ pygame.display.set_icon(ICON_IMAGE)
 # Spawn initial Blobs
 Blob.screenX = SCREEN_X
 Blob.screenY = SCREEN_Y
-for i in range(0, 2):
-	size = random.randint(14, 14)
-	blob = Blob(random.randint(int(size / 2), SCREEN_X - int(size / 2)), random.randint(int(size / 2), SCREEN_Y - int(size / 2)), size)
+for i in range(0, 10):
+	Blob.makeInitialBlob()
 
 # Spawn initial Fruits
-for i in range(0, 10):
+for i in range(0, 20):
 	fruit = Fruit(SCREEN_X, SCREEN_Y)
 
 # Main Game Loop
