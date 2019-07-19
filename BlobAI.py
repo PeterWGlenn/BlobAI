@@ -32,7 +32,7 @@ pygame.display.set_icon(ICON_IMAGE)
 # Spawn initial Blobs
 Blob.screenX = SCREEN_X
 Blob.screenY = SCREEN_Y
-for i in range(0, 10):
+for i in range(0, 100):
 	Blob.makeInitialBlob()
 
 # Spawn initial Fruits
@@ -40,6 +40,7 @@ for i in range(0, 20):
 	fruit = Fruit(SCREEN_X, SCREEN_Y)
 
 # Main Game Loop
+loops = 0
 running = True
 while running:
 
@@ -54,7 +55,7 @@ while running:
 
 	# Update Blobs
 	for blob in blobs:
-		blob.update()
+		blob.update(loops)
 
 	# Drawn Screen Background
 	screen.fill((0,0,0))
@@ -68,7 +69,7 @@ while running:
 		pygame.draw.line(screen, (50,50,50), (blob.xLoc, blob.yLoc), blob.target, int(1 * SCALE))
 	for blob in blobs:
 		pygame.draw.circle(screen, (abs(blob.color[0] - 20), abs(blob.color[1] - 20), abs(blob.color[2] - 20)), [blob.xLoc, blob.yLoc], int((blob.size / 2) * SCALE))
-		pygame.draw.circle(screen, blob.color, [blob.xLoc, blob.yLoc], (int((blob.size / 2) * SCALE)) - 0)
+		pygame.draw.circle(screen, blob.color, [blob.xLoc, blob.yLoc], (int((blob.size / 2) * SCALE)) - int(blob.radius() * 0.25))
 
 	# Draw Fruits
 	for fruit in fruits:
@@ -77,6 +78,9 @@ while running:
 
 	# Update display
 	pygame.display.flip()
+
+	# Count loops
+	loops += 1
 
 	# Frames per second limit
 	clock.tick(FRAMERATE)

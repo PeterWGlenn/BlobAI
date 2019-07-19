@@ -42,7 +42,26 @@ class Blob(object):
     def location(self):
     	return (self.xLoc, self.yLoc)
 
-    def update(self):  
+    def update(self, loops):  
+
+    	# Think every few loops
+    	n = random.randint(1, 5)
+    	if loops % n == 0:
+    		self.think()
+
+    	# Move
+    	if self.xLoc + self.xVel > self.size / 2 and self.xLoc + self.xVel < screenX - self.size / 2:
+    		self.xLoc += self.xVel
+    		self.burnCalories(loops)
+    	else:
+    		xVel = 0
+    	if self.yLoc + self.yVel > self.size / 2 and self.yLoc + self.yVel < screenY - self.size / 2:
+    		self.yLoc += self.yVel
+    		self.burnCalories(loops)
+    	else:
+    		yVel = 0
+
+    def think(self):
 
     	# Search for mate
     	foundMate = False
@@ -115,21 +134,24 @@ class Blob(object):
     	else:
     		self.yVel = 0
 
-    	# Move
-    	if self.xLoc + self.xVel > self.size / 2 and self.xLoc + self.xVel < screenX - self.size / 2:
-    		self.xLoc += self.xVel
-    	else:
-    		xVel = 0
-    	if self.yLoc + self.yVel > self.size / 2 and self.yLoc + self.yVel < screenY - self.size / 2:
-    		self.yLoc += self.yVel
-    	else:
-    		yVel = 0
-
     	# Eat nearby fruits
     	for f in Fruit.fruits:
     		if self.eatClosebyFruits(f.xLoc, f.yLoc, f.size):
     			fruits.remove(f)
     			fruit = Fruit.Fruit(screenX, screenY)
+
+    def burnCalories(self, loops):
+    	# Every 80 loops
+    	if loops % 80 == 0:
+    		# Die if too small
+    		if self.size <= 3:
+    			self.die()
+    		else:
+    			self.size -= self.speed
+
+    def die(self):
+    	if self in blobs:
+    		blobs.remove(self)
 
     def setTarget(self, x, y):
     	self.target = (x, y)
@@ -145,7 +167,7 @@ class Blob(object):
 
     def eatClosebyFruits(self, fX, fY, fS):
     	if getDistance((self.xLoc, self.yLoc), (fX, fY)) < abs(self.size / 2 + fS / 2):
-    		growthAmount = 10
+    		growthAmount = 9
     		newRadius = self.radius() + growthAmount/2
     		if newRadius + self.xLoc < screenX and newRadius + self.yLoc < screenY and self.xLoc - newRadius > 0 and self.yLoc - newRadius > 0:
     			self.size += growthAmount
