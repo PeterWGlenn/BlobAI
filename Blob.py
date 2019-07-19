@@ -26,6 +26,7 @@ class Blob(object):
     reachedTargetDistance = 5
     vision = 100
     matingSize = 30
+    babySizeLoss = 4
 
     state = 'w' # w = wandering, f = food targeting, m = mating
 
@@ -61,8 +62,8 @@ class Blob(object):
     				# If in contact, and other blob is willing, mate
     				if self.size >= self.matingSize and blob.size >= blob.matingSize and getDistance(self.location(), blob.location()) < self.radius() + blob.radius():
     					self.makeBaby(blob)
-    					self.size = int((2 * self.size) / 3)
-    					blob.size = int((2 * blob.size) / 3)
+    					self.size = self.size - self.babySizeLoss
+    					blob.size = blob.size - blob.babySizeLoss
 
 
     	# Search for food
@@ -145,7 +146,7 @@ class Blob(object):
 
     def eatClosebyFruits(self, fX, fY, fS):
     	if getDistance((self.xLoc, self.yLoc), (fX, fY)) < abs(self.size / 2 + fS / 2):
-    		growthAmount = 10
+    		growthAmount = 5
     		newRadius = self.radius() + growthAmount/2
     		if newRadius + self.xLoc < screenX and newRadius + self.yLoc < screenY and self.xLoc - newRadius > 0 and self.yLoc - newRadius > 0:
     			self.size += growthAmount
@@ -154,11 +155,11 @@ class Blob(object):
     		return False
 
     def makeInitialBlob():
-    	size = 20
+    	size = 10
     	blob = Blob(random.randint(int(size / 2), screenX - int(size / 2)), random.randint(int(size / 2), screenY - int(size / 2)), size)
 
     def makeBaby(self, mate):
-    	baby = Blob(self.xLoc, self.yLoc, int((self.size + mate.size) / 3))
+    	baby = Blob(self.xLoc, self.yLoc, self.babySizeLoss + mate.babySizeLoss)
 
     	baby.color =  (combineGenes(0, 255, self.color[0], mate.color[0]), combineGenes(0, 255, self.color[1], mate.color[1]), combineGenes(0, 255, self.color[2], mate.color[2]))
     	reachedTargetDistance = combineGenes(0, 100, self.reachedTargetDistance, mate.reachedTargetDistance)
