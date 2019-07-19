@@ -15,5 +15,5 @@ def mutation(number, percent):
 
 def combineGenes(minimum, maximum, gene1, gene2):
 	combined = ((gene1 + gene2) / 2)
-	newGene = combined + mutation(50, combined)
+	newGene = combined + mutation(20, combined)
 	return int(min(max(newGene, minimum), maximum))
