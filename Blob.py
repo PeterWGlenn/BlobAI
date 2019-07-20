@@ -20,13 +20,13 @@ class Blob(object):
 
     xVel = 0
     yVel = 0
-    speed = 1
+    speed = 2
 
     color = (125, 125, 125)
-    reachedTargetDistance = 5
-    vision = 100
-    matingSize = 30
-    babySizeLoss = 4
+    reachedTargetDistance = 3
+    vision = 150
+    matingSize = 40
+    babySizeLoss = 10
 
     state = 'w' # w = wandering, f = food targeting, m = mating
 
@@ -51,13 +51,14 @@ class Blob(object):
     		self.think()
 
     	# Move
+    	velAdjustmentValue = 40 / (self.size + 20)
     	if self.xLoc + self.xVel > self.size / 2 and self.xLoc + self.xVel < screenX - self.size / 2:
-    		self.xLoc += self.xVel
+    		self.xLoc += self.xVel * velAdjustmentValue
     		self.burnCalories(loops)
     	else:
     		xVel = 0
     	if self.yLoc + self.yVel > self.size / 2 and self.yLoc + self.yVel < screenY - self.size / 2:
-    		self.yLoc += self.yVel
+    		self.yLoc += self.yVel * velAdjustmentValue
     		self.burnCalories(loops)
     	else:
     		yVel = 0
@@ -136,16 +137,15 @@ class Blob(object):
     		self.yVel = 0
 
     	# Eat nearby fruits
-    	for f in Fruit.fruits:
-    		if self.eatClosebyFruits(f.xLoc, f.yLoc, f.size):
-    			fruits.remove(f)
-    			fruit = Fruit.Fruit(screenX, screenY)
+    	for fruit in Fruit.fruits:
+    		if self.eatClosebyFruits(fruit.xLoc, fruit.yLoc, fruit.size):
+    			fruit.move(screenX, screenY, blobs)
 
     def burnCalories(self, loops):
     	# Every 80 loops
     	if loops % 80 == 0:
     		# Die if too small
-    		if self.size <= 3:
+    		if self.size - self.speed <= 3:
     			self.die()
     		else:
     			self.size -= self.speed
@@ -168,11 +168,7 @@ class Blob(object):
 
     def eatClosebyFruits(self, fX, fY, fS):
     	if getDistance((self.xLoc, self.yLoc), (fX, fY)) < abs(self.size / 2 + fS / 2):
-<<<<<<< HEAD
-    		growthAmount = 5
-=======
-    		growthAmount = 9
->>>>>>> 1f4698e3a494a0348fb731a594470cf01063b605
+    		growthAmount = 8
     		newRadius = self.radius() + growthAmount/2
     		if newRadius + self.xLoc < screenX and newRadius + self.yLoc < screenY and self.xLoc - newRadius > 0 and self.yLoc - newRadius > 0:
     			self.size += growthAmount
@@ -181,7 +177,7 @@ class Blob(object):
     		return False
 
     def makeInitialBlob():
-    	size = 10
+    	size = 30
     	blob = Blob(random.randint(int(size / 2), screenX - int(size / 2)), random.randint(int(size / 2), screenY - int(size / 2)), size)
 
     def makeBaby(self, mate):

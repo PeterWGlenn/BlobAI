@@ -32,7 +32,7 @@ pygame.display.set_icon(ICON_IMAGE)
 # Spawn initial Blobs
 Blob.screenX = SCREEN_X
 Blob.screenY = SCREEN_Y
-for i in range(0, 100):
+for i in range(0, 65):
 	Blob.makeInitialBlob()
 
 # Spawn initial Fruits
@@ -63,13 +63,13 @@ while running:
 	# Draw Blobs
 	for blob in blobs:
 		# Show Target Radius
-		pygame.draw.circle(screen, (15,15,15), (blob.xLoc, blob.yLoc), blob.radius() + blob.vision)
+		pygame.draw.circle(screen, (5,5,5), (int(blob.xLoc), int(blob.yLoc)), blob.radius() + blob.vision)
 	for blob in blobs:
 		# Show Target Lines
-		pygame.draw.line(screen, (50,50,50), (blob.xLoc, blob.yLoc), blob.target, int(1 * SCALE))
+		pygame.draw.line(screen, (15,15,15), (blob.xLoc, blob.yLoc), blob.target, int(1 * SCALE))
 	for blob in blobs:
-		pygame.draw.circle(screen, (abs(blob.color[0] - 20), abs(blob.color[1] - 20), abs(blob.color[2] - 20)), [blob.xLoc, blob.yLoc], int((blob.size / 2) * SCALE))
-		pygame.draw.circle(screen, blob.color, [blob.xLoc, blob.yLoc], (int((blob.size / 2) * SCALE)) - int(blob.radius() * 0.25))
+		pygame.draw.circle(screen, (abs(blob.color[0] - 20), abs(blob.color[1] - 20), abs(blob.color[2] - 20)), (int(blob.xLoc), int(blob.yLoc)), int((blob.size / 2) * SCALE))
+		pygame.draw.circle(screen, blob.color, (int(blob.xLoc), int(blob.yLoc)), (int((blob.size / 2) * SCALE)) - int(blob.radius() * 0.25))
 
 	# Draw Fruits
 	for fruit in fruits:
