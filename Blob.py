@@ -9,6 +9,7 @@ import Fruit
 from Fruit import fruits
 from Util import getDistance
 from Util import combineGenes
+from Util import randomGene
 
 screenX = 1333
 screenY = 750
@@ -179,6 +180,11 @@ class Blob(object):
     def makeInitialBlob():
     	size = 30
     	blob = Blob(random.randint(int(size / 2), screenX - int(size / 2)), random.randint(int(size / 2), screenY - int(size / 2)), size)
+
+    	blob.color =  (randomGene(0, 255), randomGene(0, 255), randomGene(0, 255))
+    	reachedTargetDistance = randomGene(0, 100)
+    	vision = randomGene(1, 500)
+    	matingSize = randomGene(10, 500)
 
     def makeBaby(self, mate):
     	baby = Blob(self.xLoc, self.yLoc, self.babySizeLoss + mate.babySizeLoss)

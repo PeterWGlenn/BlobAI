@@ -32,7 +32,7 @@ pygame.display.set_icon(ICON_IMAGE)
 # Spawn initial Blobs
 Blob.screenX = SCREEN_X
 Blob.screenY = SCREEN_Y
-for i in range(0, 65):
+for i in range(0, 650):
 	Blob.makeInitialBlob()
 
 # Spawn initial Fruits
