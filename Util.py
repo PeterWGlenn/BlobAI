@@ -26,7 +26,11 @@ def greyscale(color):
 	return (averageValue, averageValue, averageValue)
 
 def addToColor(color, number):
-	
 	newColor = (abs(color[0] + number), abs(color[1] + number), abs(color[2] + number)) 
+	return newColor
+
+def percentDarker(color, percent):
+	percent = 1 - (percent / 100)
+	newColor = (int(color[0] * percent), int(color[1] * percent), int(color[2] * percent)) 
 
 	return newColor

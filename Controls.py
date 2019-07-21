@@ -9,3 +9,6 @@ def controls(keys):
 
 		if keys[pygame.K_TAB]:
 			return "stats"
+
+		if keys[pygame.K_s]:
+			return "showBlobAI"
