@@ -20,3 +20,13 @@ def combineGenes(minimum, maximum, gene1, gene2):
 
 def randomGene(minimum, maximum):
 	return random.randint(minimum, maximum)
+
+def greyscale(color):
+	averageValue = (color[0] + color[1] + color[2]) / 3
+	return (averageValue, averageValue, averageValue)
+
+def addToColor(color, number):
+	
+	newColor = (abs(color[0] + number), abs(color[1] + number), abs(color[2] + number)) 
+
+	return newColor

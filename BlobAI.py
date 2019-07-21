@@ -11,12 +11,19 @@ from Fruit import Fruit
 from Fruit import fruits
 from Blob import Blob
 from Blob import blobs
+from Controls import controls
+from Util import greyscale
+from Util import addToColor
 
 # Game constants
 FRAMERATE = 60
 SCREEN_X = 1333
 SCREEN_Y = 750
 SCALE = 1.0
+
+# Game states
+pause = False
+stats = False
 
 # Setting up pygame
 pygame.init()
@@ -32,7 +39,7 @@ pygame.display.set_icon(ICON_IMAGE)
 # Spawn initial Blobs
 Blob.screenX = SCREEN_X
 Blob.screenY = SCREEN_Y
-for i in range(0, 650):
+for i in range(0, 20):
 	Blob.makeInitialBlob()
 
 # Spawn initial Fruits
@@ -46,6 +53,15 @@ while running:
 
 	# Event Listeners
 	for event in pygame.event.get():
+
+		# Controls
+		if event.type == pygame.KEYDOWN:
+			controlWord = controls(pygame.key.get_pressed())
+
+			# Pause
+			if controlWord == "pause":
+				pause = not pause
+
 		# Closed window
 		if event.type == pygame.QUIT:
 			running = False
@@ -53,9 +69,10 @@ while running:
 
 	### Game logic ###
 
-	# Update Blobs
-	for blob in blobs:
-		blob.update(loops)
+	# Update Blobs if game unpaused
+	if not pause:
+		for blob in blobs:
+			blob.update(loops)
 
 	# Drawn Screen Background
 	screen.fill((0,0,0))
@@ -68,13 +85,27 @@ while running:
 		# Show Target Lines
 		pygame.draw.line(screen, (15,15,15), (blob.xLoc, blob.yLoc), blob.target, int(1 * SCALE))
 	for blob in blobs:
-		pygame.draw.circle(screen, (abs(blob.color[0] - 20), abs(blob.color[1] - 20), abs(blob.color[2] - 20)), (int(blob.xLoc), int(blob.yLoc)), int((blob.size / 2) * SCALE))
-		pygame.draw.circle(screen, blob.color, (int(blob.xLoc), int(blob.yLoc)), (int((blob.size / 2) * SCALE)) - int(blob.radius() * 0.25))
+
+		blobColor = blob.color
+
+		# Draw blobs in greyscale if paused
+		if pause:
+			blobColor = greyscale(blobColor)
+
+		pygame.draw.circle(screen, addToColor(blobColor, -20), (int(blob.xLoc), int(blob.yLoc)), int((blob.size / 2) * SCALE))
+		pygame.draw.circle(screen, blobColor, (int(blob.xLoc), int(blob.yLoc)), (int((blob.size / 2) * SCALE)) - int(blob.radius() * 0.25))
 
 	# Draw Fruits
 	for fruit in fruits:
-		pygame.draw.circle(screen, (0, 255, 0), [fruit.xLoc, fruit.yLoc], int(fruit.size / 2 * SCALE))
-		pygame.draw.circle(screen, (0, 220, 0), [fruit.xLoc, fruit.yLoc], int(fruit.size / 2 * SCALE) - 2)
+
+		fruitColor = (0, 255, 0)
+
+		# Draw fruits in greyscale if paused
+		if pause:
+			fruitColor = greyscale(fruitColor)
+
+		pygame.draw.circle(screen, addToColor(fruitColor, -20), [fruit.xLoc, fruit.yLoc], int(fruit.size / 2 * SCALE))
+		pygame.draw.circle(screen, fruitColor, [fruit.xLoc, fruit.yLoc], int(fruit.size / 2 * SCALE) - 2)
 
 	# Update display
 	pygame.display.flip()

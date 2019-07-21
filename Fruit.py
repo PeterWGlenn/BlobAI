@@ -21,6 +21,9 @@ class Fruit(object):
     def location(self):
     	return (self.xLoc, self.yLoc)
 
+    def radius(self):
+    	return self.size / 2
+
     def move(self, sX, sY, blobs):
     	newLocation = self.getEmptyLocation(sX, sY, blobs)
     	self.xLoc = newLocation[0]
