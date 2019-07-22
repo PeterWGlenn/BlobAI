@@ -100,7 +100,7 @@ while running:
 		if pause:
 			blobColor = greyscale(blobColor)
 
-		pygame.draw.circle(screen, addToColor(blobColor, -20), (int(blob.xLoc), int(blob.yLoc)), int((blob.size / 2) * SCALE))
+		pygame.draw.circle(screen, percentDarker(blobColor, 20), (int(blob.xLoc), int(blob.yLoc)), int((blob.size / 2) * SCALE))
 		pygame.draw.circle(screen, blobColor, (int(blob.xLoc), int(blob.yLoc)), (int((blob.size / 2) * SCALE)) - int(blob.radius() * 0.25))
 
 	# Draw Fruits
@@ -112,7 +112,7 @@ while running:
 		if pause:
 			fruitColor = greyscale(fruitColor)
 
-		pygame.draw.circle(screen, addToColor(fruitColor, -20), [fruit.xLoc, fruit.yLoc], int(fruit.size / 2 * SCALE))
+		pygame.draw.circle(screen, percentDarker(fruitColor, 20), [fruit.xLoc, fruit.yLoc], int(fruit.size / 2 * SCALE))
 		pygame.draw.circle(screen, fruitColor, [fruit.xLoc, fruit.yLoc], int(fruit.size / 2 * SCALE) - 2)
 
 	# Update display

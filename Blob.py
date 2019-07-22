@@ -182,19 +182,44 @@ class Blob(object):
     	blob = Blob(random.randint(int(size / 2), screenX - int(size / 2)), random.randint(int(size / 2), screenY - int(size / 2)), size)
 
     	blob.color =  (randomGene(0, 255), randomGene(0, 255), randomGene(0, 255))
-    	reachedTargetDistance = randomGene(0, 100)
-    	vision = randomGene(1, 500)
-    	matingSize = randomGene(10, 500)
+    	blob.reachedTargetDistance = randomGene(0, 50)
+    	blob.vision = randomGene(1, 300)
+    	blob.matingSize = randomGene(10, 100)
 
     def makeBaby(self, mate):
     	baby = Blob(self.xLoc, self.yLoc, self.babySizeLoss + mate.babySizeLoss)
 
     	baby.color =  (combineGenes(0, 255, self.color[0], mate.color[0]), combineGenes(0, 255, self.color[1], mate.color[1]), combineGenes(0, 255, self.color[2], mate.color[2]))
-    	reachedTargetDistance = combineGenes(0, 100, self.reachedTargetDistance, mate.reachedTargetDistance)
-    	vision = combineGenes(1, 750, self.vision, mate.vision)
-    	matingSize = combineGenes(10, 500, self.matingSize, mate.matingSize)
+    	baby.reachedTargetDistance = combineGenes(1, 100, self.reachedTargetDistance, mate.reachedTargetDistance)
+    	baby.vision = combineGenes(1, 750, self.vision, mate.vision)
+    	baby.matingSize = combineGenes(10, 500, self.matingSize, mate.matingSize)
 
-    	print("Blobs: ", len(blobs))
+    	# Print Averages
+    	avColor = (0, 0, 0)
+
+    	avReachedTargetDistance = 0
+    	avVision = 0
+    	avMatingSize = 0
+
+    	for blob in blobs:
+    		avColor = (avColor[0] + blob.color[0], avColor[1] + blob.color[1], avColor[2] + blob.color[2])
+    		avReachedTargetDistance += blob.reachedTargetDistance
+    		avVision += blob.vision
+    		avMatingSize += blob.matingSize
+
+    	avColor = (avColor[0] / len(blobs), avColor[1] / len(blobs), avColor[2] / len(blobs))
+    	avReachedTargetDistance = avReachedTargetDistance / len(blobs)
+    	avVision = avVision / len(blobs)
+    	avMatingSize = avMatingSize / len(blobs)
+
+    	print("")
+    	print("Number of blobs: " + str(len(blobs)))
+    	print("Average Color: " + str(avColor))
+    	print("Average Reached Target Distance: " + str(avReachedTargetDistance))
+    	print("Average Vision: " + str(avVision))
+    	print("Average Mating Size: " + str(avMatingSize))
+    	print("")
+
 
 
 
