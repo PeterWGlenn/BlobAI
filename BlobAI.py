@@ -134,7 +134,7 @@ while running:
 		pygame.draw.circle(screen, blobColor, (int(blob.xLoc), int(blob.yLoc)), (int((blob.size / 2) * SCALE)) - int(blob.radius() * 0.25))
 
 	# Draw selected blob stats
-	if selectedBlob != None:
+	if selectedBlob != None and selectedBlob.isAlive:
 
 		visionStr = "Vision: " + str(selectedBlob.vision)
 		matingSizeStr = "Mating Size: " + str(selectedBlob.matingSize)

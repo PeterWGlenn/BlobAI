@@ -19,6 +19,8 @@ blobs = []
 
 class Blob(object):
 
+    isAlive = True
+
     xVel = 0
     yVel = 0
     speed = 1
@@ -156,6 +158,9 @@ class Blob(object):
     			self.size -= self.speed
 
     def die(self):
+
+    	self.isAlive = False
+
     	if self in blobs:
     		blobs.remove(self)
 
