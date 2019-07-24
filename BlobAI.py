@@ -139,23 +139,27 @@ while running:
 		visionStr = "Vision: " + str(selectedBlob.vision)
 		matingSizeStr = "Mating Size: " + str(selectedBlob.matingSize)
 		sizeStr = "Size: " + str(selectedBlob.size)
+		childrenStr = "Children: " + str(selectedBlob.children)
 
 		fontVisionS = GAME_FONT.size(visionStr)
 		fontMatingSizeS = GAME_FONT.size(matingSizeStr)
 		fontSizeS = GAME_FONT.size(sizeStr)
+		fontChildrenS = GAME_FONT.size(childrenStr)
 
-		fontX = selectedBlob.xLoc - max(fontVisionS[0], fontMatingSizeS[0], fontSizeS[0]) / 2
-		fontY = selectedBlob.yLoc - 4 - selectedBlob.radius() - fontVisionS[1] - fontMatingSizeS[1] - fontSizeS[1]
+		fontX = selectedBlob.xLoc - max(fontVisionS[0], fontMatingSizeS[0], fontSizeS[0], fontChildrenS[0]) / 2
+		fontY = selectedBlob.yLoc - 4 - selectedBlob.radius() - fontVisionS[1] - fontMatingSizeS[1] - fontSizeS[1] - fontChildrenS[1]
 
-		pygame.draw.rect(screen, (50,50,50), [fontX - 4, fontY - 2, max(fontMatingSizeS[0], fontVisionS[0], fontSizeS[0]) + 4, fontVisionS[1] + fontMatingSizeS[1] + fontSizeS[1]])
+		pygame.draw.rect(screen, (50,50,50), [fontX - 4, fontY - 2, max(fontMatingSizeS[0], fontVisionS[0], fontSizeS[0], fontChildrenS[0]) + 4, fontVisionS[1] + fontMatingSizeS[1] + fontSizeS[1] + fontChildrenS[1]])
 
 		textSurfaceVision = GAME_FONT.render(visionStr, False, addToColor(selectedBlob.color, 100, 100, 100))
 		textSurfaceMatingSize = GAME_FONT.render(matingSizeStr, False, addToColor(selectedBlob.color, 100, 100, 100))
 		textSurfaceSize = GAME_FONT.render(sizeStr, False, addToColor(selectedBlob.color, 100, 100, 100))
+		textSurfaceChildren = GAME_FONT.render(childrenStr, False, addToColor(selectedBlob.color, 100, 100, 100))
 
 		screen.blit(textSurfaceVision, (fontX, fontY))
 		screen.blit(textSurfaceMatingSize, (fontX, fontY + fontMatingSizeS[1]))
 		screen.blit(textSurfaceSize, (fontX, fontY + fontMatingSizeS[1] + fontSizeS[1]))
+		screen.blit(textSurfaceChildren, (fontX, fontY + fontMatingSizeS[1] + fontSizeS[1] + fontChildrenS[1]))
 
 	# Update display
 	pygame.display.flip()

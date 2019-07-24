@@ -29,6 +29,8 @@ class Blob(object):
     matingSize = 40
     babySizeLoss = 10
 
+    children = 0
+
     state = 'w' # w = wandering, f = food targeting, m = mating
 
     def __init__(self, x, y, s):
@@ -82,6 +84,8 @@ class Blob(object):
     					self.setTarget(blob.xLoc, blob.yLoc)
     				# If in contact, and other blob is willing, mate
     				if self.size >= self.matingSize and blob.size >= blob.matingSize and getDistance(self.location(), blob.location()) < self.radius() + blob.radius():
+    					self.children += 1
+    					blob.children += 1
     					self.makeBaby(blob)
     					self.size = self.size - self.babySizeLoss
     					blob.size = blob.size - blob.babySizeLoss
@@ -187,6 +191,7 @@ class Blob(object):
     	blob.matingSize = randomGene(10, 100)
 
     def makeBaby(self, mate):
+
     	baby = Blob(self.xLoc, self.yLoc, self.babySizeLoss + mate.babySizeLoss)
 
     	baby.color =  (combineGenes(0, 255, self.color[0], mate.color[0]), combineGenes(0, 255, self.color[1], mate.color[1]), combineGenes(0, 255, self.color[2], mate.color[2]))
