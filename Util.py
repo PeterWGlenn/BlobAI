@@ -15,7 +15,7 @@ def mutation(number, percent):
 
 def combineGenes(minimum, maximum, gene1, gene2):
 	combined = ((gene1 + gene2) / 2)
-	newGene = combined + mutation(20, combined)
+	newGene = combined + mutation(10, combined)
 	return int(min(max(newGene, minimum), maximum))
 
 def randomGene(minimum, maximum):
@@ -26,7 +26,7 @@ def greyscale(color):
 	return (averageValue, averageValue, averageValue)
 
 def addToColor(color, number1, number2, number3):
-	newColor = (abs(color[0] + number1), abs(color[1] + number2), abs(color[2] + number3)) 
+	newColor = (min(255, abs(color[0] + number1)), min(255, abs(color[1] + number2)), min(255, abs(color[2] + number3)))
 	return newColor
 
 def percentDarker(color, percent):

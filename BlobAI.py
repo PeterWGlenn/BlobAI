@@ -15,6 +15,7 @@ from Controls import controls
 from Util import greyscale
 from Util import addToColor
 from Util import percentDarker
+from Util import getDistance
 
 # Game constants
 FRAMERATE = 60
@@ -27,6 +28,9 @@ pause = False
 stats = False
 showBlobAI = False
 
+# Save selected blob
+selectedBlob = None
+
 # Setting up pygame
 pygame.init()
 size = (SCREEN_X, SCREEN_Y)
@@ -35,6 +39,7 @@ pygame.display.set_caption("BlobAI")
 clock = pygame.time.Clock()
 ICON_IMAGE = pygame.image.load("icon.png")
 BACKGROUND_IMAGE = pygame.image.load("background.png")
+GAME_FONT = pygame.font.Font('Quesha.ttf', 30)
 
 pygame.display.set_icon(ICON_IMAGE)
 
@@ -68,6 +73,19 @@ while running:
 			if controlWord == "showBlobAI" and not pause and not stats:
 				showBlobAI = not showBlobAI
 
+		# Mouse click
+		if event.type == pygame.MOUSEBUTTONDOWN:
+			mLoc = pygame.mouse.get_pos()
+
+			clickedBlob = False
+			for blob in blobs:
+				if getDistance(blob.location(), mLoc) <= blob.radius():
+					selectedBlob = blob
+					clickedBlob = True
+
+			if not clickedBlob:
+				selectedBlob = None
+
 		# Closed window
 		if event.type == pygame.QUIT:
 			running = False
@@ -82,6 +100,18 @@ while running:
 
 	# Drawn Screen Background
 	screen.fill((0,0,0))
+
+	# Draw Fruits
+	for fruit in fruits:
+
+		fruitColor = (0, 255, 0)
+
+		# Draw fruits in greyscale if paused
+		if pause:
+			fruitColor = greyscale(fruitColor)
+
+		pygame.draw.circle(screen, percentDarker(fruitColor, 20), [fruit.xLoc, fruit.yLoc], int(fruit.size / 2 * SCALE))
+		pygame.draw.circle(screen, fruitColor, [fruit.xLoc, fruit.yLoc], int(fruit.size / 2 * SCALE) - 2)
 
 	# Draw Blobs
 	if showBlobAI:
@@ -103,17 +133,29 @@ while running:
 		pygame.draw.circle(screen, percentDarker(blobColor, 20), (int(blob.xLoc), int(blob.yLoc)), int((blob.size / 2) * SCALE))
 		pygame.draw.circle(screen, blobColor, (int(blob.xLoc), int(blob.yLoc)), (int((blob.size / 2) * SCALE)) - int(blob.radius() * 0.25))
 
-	# Draw Fruits
-	for fruit in fruits:
+	# Draw selected blob stats
+	if selectedBlob != None:
 
-		fruitColor = (0, 255, 0)
+		visionStr = "Vision: " + str(selectedBlob.vision)
+		matingSizeStr = "Mating Size: " + str(selectedBlob.matingSize)
+		sizeStr = "Size: " + str(selectedBlob.size)
 
-		# Draw fruits in greyscale if paused
-		if pause:
-			fruitColor = greyscale(fruitColor)
+		fontVisionS = GAME_FONT.size(visionStr)
+		fontMatingSizeS = GAME_FONT.size(matingSizeStr)
+		fontSizeS = GAME_FONT.size(sizeStr)
 
-		pygame.draw.circle(screen, percentDarker(fruitColor, 20), [fruit.xLoc, fruit.yLoc], int(fruit.size / 2 * SCALE))
-		pygame.draw.circle(screen, fruitColor, [fruit.xLoc, fruit.yLoc], int(fruit.size / 2 * SCALE) - 2)
+		fontX = selectedBlob.xLoc - max(fontVisionS[0], fontMatingSizeS[0], fontSizeS[0]) / 2
+		fontY = selectedBlob.yLoc - 4 - selectedBlob.radius() - fontVisionS[1] - fontMatingSizeS[1] - fontSizeS[1]
+
+		pygame.draw.rect(screen, (50,50,50), [fontX - 4, fontY - 2, max(fontMatingSizeS[0], fontVisionS[0], fontSizeS[0]) + 4, fontVisionS[1] + fontMatingSizeS[1] + fontSizeS[1]])
+
+		textSurfaceVision = GAME_FONT.render(visionStr, False, addToColor(selectedBlob.color, 100, 100, 100))
+		textSurfaceMatingSize = GAME_FONT.render(matingSizeStr, False, addToColor(selectedBlob.color, 100, 100, 100))
+		textSurfaceSize = GAME_FONT.render(sizeStr, False, addToColor(selectedBlob.color, 100, 100, 100))
+
+		screen.blit(textSurfaceVision, (fontX, fontY))
+		screen.blit(textSurfaceMatingSize, (fontX, fontY + fontMatingSizeS[1]))
+		screen.blit(textSurfaceSize, (fontX, fontY + fontMatingSizeS[1] + fontSizeS[1]))
 
 	# Update display
 	pygame.display.flip()

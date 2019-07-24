@@ -21,7 +21,7 @@ class Blob(object):
 
     xVel = 0
     yVel = 0
-    speed = 2
+    speed = 1
 
     color = (125, 125, 125)
     reachedTargetDistance = 3
