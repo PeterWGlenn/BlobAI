@@ -46,7 +46,7 @@ pygame.display.set_icon(ICON_IMAGE)
 # Spawn initial Blobs
 Blob.screenX = SCREEN_X
 Blob.screenY = SCREEN_Y
-for i in range(0, 70):
+for i in range(0, 50):
 	Blob.makeInitialBlob()
 
 # Spawn initial Fruits
@@ -101,6 +101,15 @@ while running:
 	# Drawn Screen Background
 	screen.fill((0,0,0))
 
+	# Draw Blob AI Information
+	if showBlobAI:
+		for blob in blobs:
+			# Show Target Radius
+			pygame.draw.circle(screen, (15, 15, 15), (int(blob.xLoc), int(blob.yLoc)), blob.radius() + blob.vision)
+		for blob in blobs:
+			# Show Target Lines
+			pygame.draw.line(screen, percentDarker(blob.color, 50), (blob.xLoc, blob.yLoc), blob.target, int(1 * SCALE))
+
 	# Draw Fruits
 	for fruit in fruits:
 
@@ -114,14 +123,6 @@ while running:
 		pygame.draw.circle(screen, fruitColor, [fruit.xLoc, fruit.yLoc], int(fruit.size / 2 * SCALE) - 2)
 
 	# Draw Blobs
-	if showBlobAI:
-		for blob in blobs:
-			# Show Target Radius
-			pygame.draw.circle(screen, (15, 15, 15), (int(blob.xLoc), int(blob.yLoc)), blob.radius() + blob.vision)
-		for blob in blobs:
-			# Show Target Lines
-			pygame.draw.line(screen, percentDarker(blob.color, 50), (blob.xLoc, blob.yLoc), blob.target, int(1 * SCALE))
-
 	for blob in blobs:
 
 		blobColor = blob.color
