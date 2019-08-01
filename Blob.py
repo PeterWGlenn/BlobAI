@@ -204,28 +204,33 @@ class Blob(object):
     	baby.reachedTargetDistance = combineGenes(1, 100, self.reachedTargetDistance, mate.reachedTargetDistance)
     	baby.vision = combineGenes(1, 750, self.vision, mate.vision)
     	baby.matingSize = combineGenes(10, 500, self.matingSize, mate.matingSize)
+    	baby.babySizeLoss = combineGenes(2, 100, self.babySizeLoss, mate.babySizeLoss)
 
     	# Update stats
     	avColor = (0, 0, 0)
     	avReachedTargetDistance = 0
     	avVision = 0
     	avMatingSize = 0
+    	avBabySizeLoss = 0
 
     	for blob in blobs:
     		avColor = (avColor[0] + blob.color[0], avColor[1] + blob.color[1], avColor[2] + blob.color[2])
     		avReachedTargetDistance += blob.reachedTargetDistance
     		avVision += blob.vision
     		avMatingSize += blob.matingSize
+    		avBabySizeLoss += blob.babySizeLoss
 
     	avColor = (round(avColor[0] / len(blobs), 2), round(avColor[1] / len(blobs), 2), round(avColor[2] / len(blobs)), 2)
     	avReachedTargetDistance = round(avReachedTargetDistance / len(blobs), 2)
     	avVision = round(avVision / len(blobs), 2)
     	avMatingSize = round(avMatingSize / len(blobs), 2)
+    	avBabySizeLoss = round(avBabySizeLoss / len(blobs), 2)
 
     	# Add new data to graph
     	Graph.visionData.append(avVision)
     	Graph.matingSizeData.append(avMatingSize)
     	Graph.reachedTargetDistanceData.append(avReachedTargetDistance)
+    	Graph.babySizeData.append(avBabySizeLoss)
     	Graph.numberOfBlobsData.append(len(blobs))
 
     	# Remove old data points from graph
@@ -238,6 +243,9 @@ class Blob(object):
 
     	if len(Graph.reachedTargetDistanceData) > tooManyItems:
     		Graph.reachedTargetDistanceData.pop(0)
+
+    	if len(Graph.babySizeData) > tooManyItems:
+    		Graph.babySizeData.pop(0)
 
     	if len(Graph.numberOfBlobsData) > tooManyItems:
     		Graph.numberOfBlobsData.pop(0)

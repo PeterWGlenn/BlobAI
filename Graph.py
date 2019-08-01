@@ -10,6 +10,7 @@ numberOfBlobsData = []
 visionData = []
 matingSizeData = []
 reachedTargetDistanceData = []
+babySizeData = []
 
 def convertDataPointToGraphYValue(dataPoint, dataSet, screenY):
 

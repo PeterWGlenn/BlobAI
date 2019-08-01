@@ -180,6 +180,7 @@ while running:
 			Graph.plotLine(Graph.visionData, (0, 255, 0), screen, SCREEN_X, SCREEN_Y, SCALE)
 			Graph.plotLine(Graph.matingSizeData, (255, 0, 0), screen, SCREEN_X, SCREEN_Y, SCALE)
 			Graph.plotLine(Graph.reachedTargetDistanceData, (0, 0, 255), screen, SCREEN_X, SCREEN_Y, SCALE)
+			Graph.plotLine(Graph.babySizeData, (0, 255, 255), screen, SCREEN_X, SCREEN_Y, SCALE)
 			Graph.plotLine(Graph.numberOfBlobsData, (255,255,255), screen, SCREEN_X, SCREEN_Y, SCALE)
 
 
