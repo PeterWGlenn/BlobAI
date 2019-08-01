@@ -6,6 +6,7 @@
 import math
 import random
 import Fruit
+import Graph
 from Fruit import fruits
 from Util import getDistance
 from Util import combineGenes
@@ -23,7 +24,7 @@ class Blob(object):
 
     xVel = 0
     yVel = 0
-    speed = 1
+    speed = 1.2
 
     color = (125, 125, 125)
     reachedTargetDistance = 3
@@ -192,7 +193,7 @@ class Blob(object):
 
     	blob.color =  (randomGene(0, 255), randomGene(0, 255), randomGene(0, 255))
     	blob.reachedTargetDistance = randomGene(0, 50)
-    	blob.vision = randomGene(1, 300)
+    	blob.vision = randomGene(50, 200)
     	blob.matingSize = randomGene(10, 100)
 
     def makeBaby(self, mate):
@@ -204,9 +205,8 @@ class Blob(object):
     	baby.vision = combineGenes(1, 750, self.vision, mate.vision)
     	baby.matingSize = combineGenes(10, 500, self.matingSize, mate.matingSize)
 
-    	# Print Averages
+    	# Update stats
     	avColor = (0, 0, 0)
-
     	avReachedTargetDistance = 0
     	avVision = 0
     	avMatingSize = 0
@@ -217,20 +217,27 @@ class Blob(object):
     		avVision += blob.vision
     		avMatingSize += blob.matingSize
 
-    	avColor = (avColor[0] / len(blobs), avColor[1] / len(blobs), avColor[2] / len(blobs))
-    	avReachedTargetDistance = avReachedTargetDistance / len(blobs)
-    	avVision = avVision / len(blobs)
-    	avMatingSize = avMatingSize / len(blobs)
+    	avColor = (round(avColor[0] / len(blobs), 2), round(avColor[1] / len(blobs), 2), round(avColor[2] / len(blobs)), 2)
+    	avReachedTargetDistance = round(avReachedTargetDistance / len(blobs), 2)
+    	avVision = round(avVision / len(blobs), 2)
+    	avMatingSize = round(avMatingSize / len(blobs), 2)
 
-    	print("")
-    	print("Number of blobs: " + str(len(blobs)))
-    	print("Average Color: " + str(avColor))
-    	print("Average Reached Target Distance: " + str(avReachedTargetDistance))
-    	print("Average Vision: " + str(avVision))
-    	print("Average Mating Size: " + str(avMatingSize))
-    	print("")
+    	# Add new data to graph
+    	Graph.visionData.append(avVision)
+    	Graph.matingSizeData.append(avMatingSize)
+    	Graph.reachedTargetDistanceData.append(avReachedTargetDistance)
+    	Graph.numberOfBlobsData.append(len(blobs))
 
+    	# Remove old data points from graph
+    	tooManyItems = 1000
+    	if len(Graph.visionData) > tooManyItems:
+    		Graph.visionData.pop(0)
 
+    	if len(Graph.matingSizeData) > tooManyItems:
+    		Graph.matingSizeData.pop(0)
 
+    	if len(Graph.reachedTargetDistanceData) > tooManyItems:
+    		Graph.reachedTargetDistanceData.pop(0)
 
-
+    	if len(Graph.numberOfBlobsData) > tooManyItems:
+    		Graph.numberOfBlobsData.pop(0)

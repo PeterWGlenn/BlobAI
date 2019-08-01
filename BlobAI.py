@@ -7,6 +7,7 @@
 # Imports
 import pygame
 import random
+import Graph
 from Fruit import Fruit
 from Fruit import fruits
 from Blob import Blob
@@ -73,8 +74,12 @@ while running:
 			if controlWord == "showBlobAI" and not pause and not stats:
 				showBlobAI = not showBlobAI
 
+			# Toggle Stats Screen
+			if controlWord == "stats":
+				stats = not stats
+
 		# Mouse click
-		if event.type == pygame.MOUSEBUTTONDOWN:
+		if event.type == pygame.MOUSEBUTTONDOWN and not stats:
 			mLoc = pygame.mouse.get_pos()
 
 			clickedBlob = False
@@ -93,74 +98,90 @@ while running:
 
 	### Game logic ###
 
-	# Update Blobs if game unpaused
+	# Update Blobs and stats if game unpaused
 	if not pause:
 		for blob in blobs:
 			blob.update(loops)
 
-	# Drawn Screen Background
-	screen.fill((0,0,0))
+	# Draw game when not in stats screen
+	if not stats:
 
-	# Draw Blob AI Information
-	if showBlobAI:
+		# Drawn Screen Background
+		screen.fill((0,0,0))
+
+		# Draw Blob AI Information
+		if showBlobAI:
+			for blob in blobs:
+				# Show Target Radius
+				pygame.draw.circle(screen, (20, 20, 20), (int(blob.xLoc), int(blob.yLoc)), blob.radius() + blob.vision)
+			for blob in blobs:
+				# Show Target Lines
+				pygame.draw.line(screen, percentDarker(blob.color, 50), (blob.xLoc, blob.yLoc), blob.target, int(1 * SCALE))
+	
+		# Draw Fruits
+		for fruit in fruits:
+	
+			fruitColor = (0, 255, 0)
+	
+			# Draw fruits in greyscale if paused
+			if pause:
+				fruitColor = greyscale(fruitColor)
+	
+			pygame.draw.circle(screen, percentDarker(fruitColor, 20), [fruit.xLoc, fruit.yLoc], int(fruit.size / 2 * SCALE))
+			pygame.draw.circle(screen, fruitColor, [fruit.xLoc, fruit.yLoc], int(fruit.size / 2 * SCALE) - 2)
+
+		# Draw Blobs
 		for blob in blobs:
-			# Show Target Radius
-			pygame.draw.circle(screen, (15, 15, 15), (int(blob.xLoc), int(blob.yLoc)), blob.radius() + blob.vision)
-		for blob in blobs:
-			# Show Target Lines
-			pygame.draw.line(screen, percentDarker(blob.color, 50), (blob.xLoc, blob.yLoc), blob.target, int(1 * SCALE))
+	
+			blobColor = blob.color
+	
+			# Draw blobs in greyscale if paused
+			if pause:
+				blobColor = greyscale(blobColor)
 
-	# Draw Fruits
-	for fruit in fruits:
+			pygame.draw.circle(screen, percentDarker(blobColor, 20), (int(blob.xLoc), int(blob.yLoc)), int((blob.size / 2) * SCALE))
+			pygame.draw.circle(screen, blobColor, (int(blob.xLoc), int(blob.yLoc)), (int((blob.size / 2) * SCALE)) - int(blob.radius() * 0.25))
 
-		fruitColor = (0, 255, 0)
+		# Draw selected blob stats
+		if selectedBlob != None and selectedBlob.isAlive:
 
-		# Draw fruits in greyscale if paused
-		if pause:
-			fruitColor = greyscale(fruitColor)
+			visionStr = "Vision: " + str(selectedBlob.vision)
+			matingSizeStr = "Mating Size: " + str(selectedBlob.matingSize)
+			sizeStr = "Size: " + str(round(selectedBlob.size, 2))
+			childrenStr = "Children: " + str(selectedBlob.children)
 
-		pygame.draw.circle(screen, percentDarker(fruitColor, 20), [fruit.xLoc, fruit.yLoc], int(fruit.size / 2 * SCALE))
-		pygame.draw.circle(screen, fruitColor, [fruit.xLoc, fruit.yLoc], int(fruit.size / 2 * SCALE) - 2)
+			fontVisionS = GAME_FONT.size(visionStr)
+			fontMatingSizeS = GAME_FONT.size(matingSizeStr)
+			fontSizeS = GAME_FONT.size(sizeStr)
+			fontChildrenS = GAME_FONT.size(childrenStr)
 
-	# Draw Blobs
-	for blob in blobs:
+			fontX = selectedBlob.xLoc - max(fontVisionS[0], fontMatingSizeS[0], fontSizeS[0], fontChildrenS[0]) / 2
+			fontY = selectedBlob.yLoc - 4 - selectedBlob.radius() - fontVisionS[1] - fontMatingSizeS[1] - fontSizeS[1] - fontChildrenS[1]
 
-		blobColor = blob.color
+			pygame.draw.rect(screen, (50,50,50), [fontX - 4, fontY - 2, max(fontMatingSizeS[0], fontVisionS[0], fontSizeS[0], fontChildrenS[0]) + 4, fontVisionS[1] + fontMatingSizeS[1] + fontSizeS[1] + fontChildrenS[1]])
 
-		# Draw blobs in greyscale if paused
-		if pause:
-			blobColor = greyscale(blobColor)
+			textSurfaceVision = GAME_FONT.render(visionStr, False, addToColor(selectedBlob.color, 100, 100, 100))
+			textSurfaceMatingSize = GAME_FONT.render(matingSizeStr, False, addToColor(selectedBlob.color, 100, 100, 100))
+			textSurfaceSize = GAME_FONT.render(sizeStr, False, addToColor(selectedBlob.color, 100, 100, 100))
+			textSurfaceChildren = GAME_FONT.render(childrenStr, False, addToColor(selectedBlob.color, 100, 100, 100))
 
-		pygame.draw.circle(screen, percentDarker(blobColor, 20), (int(blob.xLoc), int(blob.yLoc)), int((blob.size / 2) * SCALE))
-		pygame.draw.circle(screen, blobColor, (int(blob.xLoc), int(blob.yLoc)), (int((blob.size / 2) * SCALE)) - int(blob.radius() * 0.25))
+			screen.blit(textSurfaceVision, (fontX, fontY))
+			screen.blit(textSurfaceMatingSize, (fontX, fontY + fontMatingSizeS[1]))
+			screen.blit(textSurfaceSize, (fontX, fontY + fontMatingSizeS[1] + fontSizeS[1]))
+			screen.blit(textSurfaceChildren, (fontX, fontY + fontMatingSizeS[1] + fontSizeS[1] + fontChildrenS[1]))
 
-	# Draw selected blob stats
-	if selectedBlob != None and selectedBlob.isAlive:
+	# If stat screen is toggled, render stats screen
+	else:
+		if loops % 4 == 0:	
 
-		visionStr = "Vision: " + str(selectedBlob.vision)
-		matingSizeStr = "Mating Size: " + str(selectedBlob.matingSize)
-		sizeStr = "Size: " + str(selectedBlob.size)
-		childrenStr = "Children: " + str(selectedBlob.children)
+			# Drawn Screen Background
+			screen.fill((0,0,0))
 
-		fontVisionS = GAME_FONT.size(visionStr)
-		fontMatingSizeS = GAME_FONT.size(matingSizeStr)
-		fontSizeS = GAME_FONT.size(sizeStr)
-		fontChildrenS = GAME_FONT.size(childrenStr)
+			Graph.plotLine(Graph.visionData, (0, 255, 0), screen, SCREEN_X, SCREEN_Y, SCALE)
+			Graph.plotLine(Graph.matingSizeData, (255, 0, 0), screen, SCREEN_X, SCREEN_Y, SCALE)
+			Graph.plotLine(Graph.reachedTargetDistanceData, (0, 0, 255), screen, SCREEN_X, SCREEN_Y, SCALE)
+			Graph.plotLine(Graph.numberOfBlobsData, (255,255,255), screen, SCREEN_X, SCREEN_Y, SCALE)
 
-		fontX = selectedBlob.xLoc - max(fontVisionS[0], fontMatingSizeS[0], fontSizeS[0], fontChildrenS[0]) / 2
-		fontY = selectedBlob.yLoc - 4 - selectedBlob.radius() - fontVisionS[1] - fontMatingSizeS[1] - fontSizeS[1] - fontChildrenS[1]
-
-		pygame.draw.rect(screen, (50,50,50), [fontX - 4, fontY - 2, max(fontMatingSizeS[0], fontVisionS[0], fontSizeS[0], fontChildrenS[0]) + 4, fontVisionS[1] + fontMatingSizeS[1] + fontSizeS[1] + fontChildrenS[1]])
-
-		textSurfaceVision = GAME_FONT.render(visionStr, False, addToColor(selectedBlob.color, 100, 100, 100))
-		textSurfaceMatingSize = GAME_FONT.render(matingSizeStr, False, addToColor(selectedBlob.color, 100, 100, 100))
-		textSurfaceSize = GAME_FONT.render(sizeStr, False, addToColor(selectedBlob.color, 100, 100, 100))
-		textSurfaceChildren = GAME_FONT.render(childrenStr, False, addToColor(selectedBlob.color, 100, 100, 100))
-
-		screen.blit(textSurfaceVision, (fontX, fontY))
-		screen.blit(textSurfaceMatingSize, (fontX, fontY + fontMatingSizeS[1]))
-		screen.blit(textSurfaceSize, (fontX, fontY + fontMatingSizeS[1] + fontSizeS[1]))
-		screen.blit(textSurfaceChildren, (fontX, fontY + fontMatingSizeS[1] + fontSizeS[1] + fontChildrenS[1]))
 
 	# Update display
 	pygame.display.flip()
