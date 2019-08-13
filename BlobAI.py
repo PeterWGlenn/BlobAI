@@ -177,6 +177,13 @@ while running:
 			# Drawn Screen Background
 			screen.fill((0,0,0))
 
+			# Drawn Graph Background
+			fromLeft = 80
+			fromRight = 80
+			fromTop = 80
+			fromBottom = 240
+			pygame.draw.rect(screen, (40,40,40), [fromLeft, fromTop, SCREEN_X - fromLeft - fromRight, SCREEN_Y - fromBottom - fromTop], 0)
+
 			Graph.plotLine(Graph.visionData, (0, 255, 0), screen, SCREEN_X, SCREEN_Y, SCALE)
 			Graph.plotLine(Graph.matingSizeData, (255, 0, 0), screen, SCREEN_X, SCREEN_Y, SCALE)
 			Graph.plotLine(Graph.reachedTargetDistanceData, (0, 0, 255), screen, SCREEN_X, SCREEN_Y, SCALE)

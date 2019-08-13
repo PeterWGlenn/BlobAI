@@ -20,7 +20,7 @@ def convertDataPointToGraphYValue(dataPoint, dataSet, screenY):
 		valMinusMin = dataPoint - min(dataSet)
 		screenPercent = valMinusMin / maxMinusMin
 
-		screenYBuffer = 50
+		screenYBuffer = 8
 
 		return ((screenY - screenYBuffer) * (1 - screenPercent)) + screenYBuffer / 2
 	else:
@@ -29,10 +29,15 @@ def convertDataPointToGraphYValue(dataPoint, dataSet, screenY):
 def plotLine(dataSet, color, screen, screenX, screenY, scale):
 	if len(dataSet) > 1:
 
-		graphExpansionX = (screenX - 50) / len(dataSet)
+		fromLeft = 80
+		fromRight = 80
+		fromTop = 80
+		fromBottom = 240
+
+		graphExpansionX = (screenX - fromRight - fromLeft) / (len(dataSet) - 1)
 
 		for d in range(0, len(dataSet) - 1):
 			pygame.draw.line(screen, color, 
-				(d * graphExpansionX, convertDataPointToGraphYValue(dataSet[d], dataSet, screenY)), 
-				((d + 1) * graphExpansionX, convertDataPointToGraphYValue(dataSet[d + 1], dataSet, screenY)), int(1 * scale))
+				(d * graphExpansionX + fromLeft, convertDataPointToGraphYValue(dataSet[d], dataSet, screenY - fromBottom - fromTop) + fromTop), 
+				((d + 1) * graphExpansionX + fromLeft, convertDataPointToGraphYValue(dataSet[d + 1], dataSet, screenY - fromBottom - fromTop) + fromTop), int(1 * scale))
 
