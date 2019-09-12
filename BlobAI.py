@@ -17,6 +17,8 @@ from Util import greyscale
 from Util import addToColor
 from Util import percentDarker
 from Util import getDistance
+from Button import buttons
+from Button import Button
 
 # Game constants
 FRAMERATE = 60
@@ -44,10 +46,18 @@ GAME_FONT = pygame.font.Font('Quesha.ttf', 30)
 
 pygame.display.set_icon(ICON_IMAGE)
 
+# Set up buttons
+buttonYValue = SCREEN_Y * 0.75
+numbBlobsButton = Button("Number of Blobs", (255,255,255), (SCREEN_X - Button.width) * 0.1, buttonYValue)
+visionButton = Button("Vision Radius", (0,255,0), (SCREEN_X - Button.width) * 0.3, buttonYValue)
+matingSizeButton = Button("Mating Size", (255,0,0), (SCREEN_X - Button.width) * 0.5, buttonYValue)
+reachedTargetDistanceButton = Button("Reached Target Distance", (0,0,255), (SCREEN_X - Button.width) * 0.7, buttonYValue)
+babySizeButton = Button("Baby Size", (0,255,255), (SCREEN_X - Button.width) * 0.9, buttonYValue)
+
 # Spawn initial Blobs
 Blob.screenX = SCREEN_X
 Blob.screenY = SCREEN_Y
-for i in range(0, 50):
+for i in range(0, 100):
 	Blob.makeInitialBlob()
 
 # Spawn initial Fruits
@@ -78,7 +88,7 @@ while running:
 			if controlWord == "stats":
 				stats = not stats
 
-		# Mouse click
+		# Mouse click on blobs screen
 		if event.type == pygame.MOUSEBUTTONDOWN and not stats:
 			mLoc = pygame.mouse.get_pos()
 
@@ -90,6 +100,16 @@ while running:
 
 			if not clickedBlob:
 				selectedBlob = None
+
+		# Mouse click on stats
+		if event.type == pygame.MOUSEBUTTONDOWN and stats:
+			mLoc = pygame.mouse.get_pos()
+			mX = mLoc[0]
+			mY = mLoc[1]
+
+			for b in buttons:
+				if mX > b.xLoc and mX < b.xLoc + b.width and mY > b.yLoc and mY < b.yLoc + b.height:
+					b.press()
 
 		# Closed window
 		if event.type == pygame.QUIT:
@@ -184,12 +204,21 @@ while running:
 			fromBottom = 240
 			pygame.draw.rect(screen, (40,40,40), [fromLeft, fromTop, SCREEN_X - fromLeft - fromRight, SCREEN_Y - fromBottom - fromTop], 0)
 
-			Graph.plotLine(Graph.visionData, (0, 255, 0), screen, SCREEN_X, SCREEN_Y, SCALE)
-			Graph.plotLine(Graph.matingSizeData, (255, 0, 0), screen, SCREEN_X, SCREEN_Y, SCALE)
-			Graph.plotLine(Graph.reachedTargetDistanceData, (0, 0, 255), screen, SCREEN_X, SCREEN_Y, SCALE)
-			Graph.plotLine(Graph.babySizeData, (0, 255, 255), screen, SCREEN_X, SCREEN_Y, SCALE)
-			Graph.plotLine(Graph.numberOfBlobsData, (255,255,255), screen, SCREEN_X, SCREEN_Y, SCALE)
+			# Plot Graph Lines
+			if visionButton.pressed:
+				Graph.plotLine(Graph.visionData, (0, 255, 0), screen, SCREEN_X, SCREEN_Y, SCALE)
+			if matingSizeButton.pressed:
+				Graph.plotLine(Graph.matingSizeData, (255, 0, 0), screen, SCREEN_X, SCREEN_Y, SCALE)
+			if reachedTargetDistanceButton.pressed:
+				Graph.plotLine(Graph.reachedTargetDistanceData, (0, 0, 255), screen, SCREEN_X, SCREEN_Y, SCALE)
+			if babySizeButton.pressed:
+				Graph.plotLine(Graph.babySizeData, (0, 255, 255), screen, SCREEN_X, SCREEN_Y, SCALE)
+			if numbBlobsButton.pressed:
+				Graph.plotLine(Graph.numberOfBlobsData, (255,255,255), screen, SCREEN_X, SCREEN_Y, SCALE)
 
+			# Draw Buttons
+			for button in buttons:
+				button.draw(screen, SCREEN_X, SCREEN_Y, SCALE)
 
 	# Update display
 	pygame.display.flip()

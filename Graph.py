@@ -4,6 +4,7 @@
 # @version 8.1.2019
 
 import pygame
+from enum import Enum
 
 # Graph data points
 numberOfBlobsData = []
@@ -27,6 +28,7 @@ def convertDataPointToGraphYValue(dataPoint, dataSet, screenY):
 		return screenY / 2
 
 def plotLine(dataSet, color, screen, screenX, screenY, scale):
+
 	if len(dataSet) > 1:
 
 		fromLeft = 80

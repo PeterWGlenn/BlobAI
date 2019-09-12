@@ -18,13 +18,13 @@ screenY = 750
 # Store Blobs in list
 blobs = []
 
-class Blob(object):
+class Blob(object): 
 
     isAlive = True
 
     xVel = 0
     yVel = 0
-    speed = 1.2
+    speed = 1.2 * 1 #coefficient is a test
 
     color = (125, 125, 125)
     reachedTargetDistance = 3
