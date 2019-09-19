@@ -206,6 +206,10 @@ while running:
 			fromBottom = 240
 			pygame.draw.rect(screen, (40,40,40), [fromLeft, fromTop, SCREEN_X - fromLeft - fromRight, SCREEN_Y - fromBottom - fromTop], 0)
 
+			# Draw Graph Title
+			title = GAME_FONT.render("Blob Statistics (Value vs Nonconstant Time)", False, (255,255,255))
+			screen.blit(title, (80, 40))
+
 			# Plot Graph Lines
 			if visionButton.pressed:
 				Graph.plotLine(Graph.visionData, (0, 255, 0), screen, SCREEN_X, SCREEN_Y, SCALE)
