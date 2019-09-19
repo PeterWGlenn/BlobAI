@@ -58,11 +58,11 @@ babySizeButton = Button("Baby Size", (0,255,255), buttonXValueMulti * 0.9, butto
 # Spawn initial Blobs
 Blob.screenX = SCREEN_X
 Blob.screenY = SCREEN_Y
-for i in range(0, 20):
+for i in range(0, 100):
 	Blob.makeInitialBlob()
 
 # Spawn initial Fruits
-for i in range(0, 100):
+for i in range(0, 20):
 	fruit = Fruit(SCREEN_X, SCREEN_Y)
 
 # Main Game Loop
@@ -205,22 +205,6 @@ while running:
 			fromBottom = 240
 			pygame.draw.rect(screen, (40,40,40), [fromLeft, fromTop, SCREEN_X - fromLeft - fromRight, SCREEN_Y - fromBottom - fromTop], 0)
 
-			# Draw Graph Text
-			# Title
-			title = GAME_FONT.render("Blob Statistics (Value vs Nonconstant Time)", False, (255,255,255))
-			screen.blit(title, (80, 40))
-			# Data
-			numbBlobs = GAME_FONT.render("Number of Blobs", False, (255,255,255))
-			screen.blit(numbBlobs, (buttonXValueMulti * 0.1, buttonYValue + Button.height))
-			vision = GAME_FONT.render("Vision", False, (0,255,0))
-			screen.blit(vision, (buttonXValueMulti * 0.3, buttonYValue + Button.height))
-			matingSize = GAME_FONT.render("Mating Size", False, (255,0,0))
-			screen.blit(matingSize, (buttonXValueMulti * 0.5, buttonYValue + Button.height))
-			reachedTargetDistance = GAME_FONT.render("Reached Target Distance", False, (0,0,255))
-			screen.blit(reachedTargetDistance, (buttonXValueMulti * 0.7, buttonYValue + Button.height))
-			babySize = GAME_FONT.render("Baby Size", False, (0,255,255))
-			screen.blit(babySize, (buttonXValueMulti * 0.9, buttonYValue + Button.height))
-
 			# Plot Graph Lines
 			if visionButton.pressed:
 				Graph.plotLine(Graph.visionData, (0, 255, 0), screen, SCREEN_X, SCREEN_Y, SCALE)
@@ -235,7 +219,7 @@ while running:
 
 			# Draw Buttons
 			for button in buttons:
-				button.draw(screen, SCREEN_X, SCREEN_Y, SCALE)
+				button.draw(screen, SCREEN_X, SCREEN_Y, SCALE, GAME_FONT)
 
 	# Update display
 	pygame.display.flip()

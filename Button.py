@@ -22,7 +22,11 @@ class Button(object):
 	    self.color = c
 	    buttons.append(self)
 
-	def draw(self, screen, screenX, screenY, scale):
+	def draw(self, screen, screenX, screenY, scale, font):
+
+		# Draw button name
+		nameFont = font.render(self.name, False, self.color)
+		screen.blit(nameFont, (self.xLoc + (self.width / 2) - (font.size(str(self.name))[0] / 2), self.yLoc + self.height))
 
 		# Change color if pressed
 		drawColor = self.color
