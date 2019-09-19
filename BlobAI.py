@@ -41,28 +41,29 @@ screen = pygame.display.set_mode(size)
 pygame.display.set_caption("BlobAI")
 clock = pygame.time.Clock()
 ICON_IMAGE = pygame.image.load("icon.png")
-BACKGROUND_IMAGE = pygame.image.load("background.png")
 GAME_FONT = pygame.font.Font('Quesha.ttf', 30)
 
 pygame.display.set_icon(ICON_IMAGE)
 
 # Set up buttons
+buttonSpacingCoeff = 1 / 7
 buttonYValue = SCREEN_Y * 0.75
 buttonXValueMulti = (SCREEN_X - Button.width)
-numbBlobsButton = Button("Number of Blobs", (255,255,255), buttonXValueMulti * 0.1, buttonYValue)
-visionButton = Button("Vision Radius", (0,255,0), buttonXValueMulti * 0.3, buttonYValue)
-matingSizeButton = Button("Mating Size", (255,0,0), buttonXValueMulti * 0.5, buttonYValue)
-reachedTargetDistanceButton = Button("Reached Target Distance", (0,0,255), buttonXValueMulti * 0.7, buttonYValue)
-babySizeButton = Button("Baby Size", (0,255,255), buttonXValueMulti * 0.9, buttonYValue)
+numbBlobsButton = Button("Number of Blobs", (255,255,255), buttonXValueMulti * buttonSpacingCoeff, buttonYValue)
+visionButton = Button("Vision Radius", (0,255,0), buttonXValueMulti * buttonSpacingCoeff * 2, buttonYValue)
+matingSizeButton = Button("Mating Size", (255,0,0), buttonXValueMulti * buttonSpacingCoeff * 3, buttonYValue)
+reachedTargetDistanceButton = Button("Reached Target Distance", (0,0,255), buttonXValueMulti * buttonSpacingCoeff * 4, buttonYValue)
+babySizeButton = Button("Baby Size", (0,255,255), buttonXValueMulti * buttonSpacingCoeff * 5, buttonYValue)
+speedButton = Button("Speed", (255,255,0), buttonXValueMulti * buttonSpacingCoeff * 6, buttonYValue)
 
 # Spawn initial Blobs
 Blob.screenX = SCREEN_X
 Blob.screenY = SCREEN_Y
-for i in range(0, 100):
+for i in range(0, 50):
 	Blob.makeInitialBlob()
 
 # Spawn initial Fruits
-for i in range(0, 20):
+for i in range(0, 14):
 	fruit = Fruit(SCREEN_X, SCREEN_Y)
 
 # Main Game Loop
@@ -216,6 +217,8 @@ while running:
 				Graph.plotLine(Graph.babySizeData, (0, 255, 255), screen, SCREEN_X, SCREEN_Y, SCALE)
 			if numbBlobsButton.pressed:
 				Graph.plotLine(Graph.numberOfBlobsData, (255,255,255), screen, SCREEN_X, SCREEN_Y, SCALE)
+			if speedButton.pressed:
+				Graph.plotLine(Graph.speedData, (255,255,0), screen, SCREEN_X, SCREEN_Y, SCALE)
 
 			# Draw Buttons
 			for button in buttons:

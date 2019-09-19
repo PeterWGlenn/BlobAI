@@ -193,8 +193,9 @@ class Blob(object):
 
     	blob.color =  (randomGene(0, 255), randomGene(0, 255), randomGene(0, 255))
     	blob.reachedTargetDistance = randomGene(0, 50)
-    	blob.vision = randomGene(50, 200)
+    	blob.vision = randomGene(50, 500)
     	blob.matingSize = randomGene(10, 100)
+    	blob.speed = randomGene(1, 2)
 
     def makeBaby(self, mate):
 
@@ -205,6 +206,7 @@ class Blob(object):
     	baby.vision = combineGenes(1, 750, self.vision, mate.vision)
     	baby.matingSize = combineGenes(10, 500, self.matingSize, mate.matingSize)
     	baby.babySizeLoss = combineGenes(2, 100, self.babySizeLoss, mate.babySizeLoss)
+    	baby.speed = combineGenes(0.1, 4, self.speed, mate.speed)
 
     	# Update stats
     	avColor = (0, 0, 0)
@@ -212,6 +214,7 @@ class Blob(object):
     	avVision = 0
     	avMatingSize = 0
     	avBabySizeLoss = 0
+    	avSpeed = 0
 
     	for blob in blobs:
     		avColor = (avColor[0] + blob.color[0], avColor[1] + blob.color[1], avColor[2] + blob.color[2])
@@ -219,12 +222,14 @@ class Blob(object):
     		avVision += blob.vision
     		avMatingSize += blob.matingSize
     		avBabySizeLoss += blob.babySizeLoss
+    		avSpeed += blob.speed
 
     	avColor = (round(avColor[0] / len(blobs), 2), round(avColor[1] / len(blobs), 2), round(avColor[2] / len(blobs)), 2)
     	avReachedTargetDistance = round(avReachedTargetDistance / len(blobs), 2)
     	avVision = round(avVision / len(blobs), 2)
     	avMatingSize = round(avMatingSize / len(blobs), 2)
     	avBabySizeLoss = round(avBabySizeLoss / len(blobs), 2)
+    	avSpeed = round(avSpeed / len(blobs), 2)
 
     	# Add new data to graph
     	Graph.visionData.append(avVision)
@@ -232,20 +237,23 @@ class Blob(object):
     	Graph.reachedTargetDistanceData.append(avReachedTargetDistance)
     	Graph.babySizeData.append(avBabySizeLoss)
     	Graph.numberOfBlobsData.append(len(blobs))
+    	Graph.speedData.append(avSpeed)
 
     	# Remove old data points from graph
-    	tooManyItems = 1000
+    	tooManyItems = 700
     	if len(Graph.visionData) > tooManyItems:
-    		Graph.visionData.pop(0)
 
-    	if len(Graph.matingSizeData) > tooManyItems:
-    		Graph.matingSizeData.pop(0)
+    		i = 0
+    		for d in Graph.numberOfBlobsData:
 
-    	if len(Graph.reachedTargetDistanceData) > tooManyItems:
-    		Graph.reachedTargetDistanceData.pop(0)
+    			if i % 10 == 0:
 
-    	if len(Graph.babySizeData) > tooManyItems:
-    		Graph.babySizeData.pop(0)
+    				Graph.visionData.remove(Graph.visionData[i])
+    				Graph.matingSizeData.remove(Graph.matingSizeData[i])
+    				Graph.reachedTargetDistanceData.remove(Graph.reachedTargetDistanceData[i])
+    				Graph.babySizeData.remove(Graph.babySizeData[i])
+    				Graph.numberOfBlobsData.remove(Graph.numberOfBlobsData[i])
+    				Graph.speedData.remove(Graph.speedData[i])
 
-    	if len(Graph.numberOfBlobsData) > tooManyItems:
-    		Graph.numberOfBlobsData.pop(0)
+    			i += 1
+
