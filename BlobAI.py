@@ -41,7 +41,7 @@ screen = pygame.display.set_mode(size)
 pygame.display.set_caption("BlobAI")
 clock = pygame.time.Clock()
 ICON_IMAGE = pygame.image.load("icon.png")
-GAME_FONT = pygame.font.Font('Quesha.ttf', 30)
+GAME_FONT = pygame.font.Font('times-new-roman.ttf', 24)
 
 pygame.display.set_icon(ICON_IMAGE)
 
@@ -52,18 +52,18 @@ buttonXValueMulti = (SCREEN_X - Button.width)
 numbBlobsButton = Button("Number of Blobs", (255,255,255), buttonXValueMulti * buttonSpacingCoeff, buttonYValue)
 visionButton = Button("Vision Radius", (0,255,0), buttonXValueMulti * buttonSpacingCoeff * 2, buttonYValue)
 matingSizeButton = Button("Mating Size", (255,0,0), buttonXValueMulti * buttonSpacingCoeff * 3, buttonYValue)
-reachedTargetDistanceButton = Button("Reached Target Distance", (0,0,255), buttonXValueMulti * buttonSpacingCoeff * 4, buttonYValue)
+reachedTargetDistanceButton = Button("Target Dedication", (0,0,255), buttonXValueMulti * buttonSpacingCoeff * 4, buttonYValue)
 babySizeButton = Button("Baby Size", (0,255,255), buttonXValueMulti * buttonSpacingCoeff * 5, buttonYValue)
 speedButton = Button("Speed", (255,255,0), buttonXValueMulti * buttonSpacingCoeff * 6, buttonYValue)
 
 # Spawn initial Blobs
 Blob.screenX = SCREEN_X
 Blob.screenY = SCREEN_Y
-for i in range(0, 50):
+for i in range(0, 75):
 	Blob.makeInitialBlob()
 
 # Spawn initial Fruits
-for i in range(0, 14):
+for i in range(0, 16):
 	fruit = Fruit(SCREEN_X, SCREEN_Y)
 
 # Main Game Loop
